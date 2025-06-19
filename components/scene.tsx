@@ -24,7 +24,7 @@ class Vector {
   }
 
   rotate(sign: number) {
-    const rotationSpeed = 0.25;
+    const rotationSpeed = 0.01;
 
     return new Vector(
       Math.cos(sign * rotationSpeed) * this.x -
@@ -138,9 +138,21 @@ const Scene = (props: {
     }),
     [position, direction, plane, width, height, sceneTiles]
   );
-
+  console.log("Something");
   return (
-    <SceneContext.Provider value={value}>{children}</SceneContext.Provider>
+    <SceneContext.Provider value={value}>
+      <div
+        onMouseMove={(event) => {
+          const rot = -event.movementX;
+          const nextPointVector = directionVector.rotate(rot);
+          const nextPlaneVector = new Vector(plane.x, plane.y).rotate(rot);
+          setDirection({ x: nextPointVector.x, y: nextPointVector.y });
+          setPlane({ x: nextPlaneVector.x, y: nextPlaneVector.y });
+        }}
+      >
+        {children}
+      </div>
+    </SceneContext.Provider>
   );
 };
 
