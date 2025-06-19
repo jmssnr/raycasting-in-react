@@ -24,7 +24,7 @@ class Vector {
   }
 
   rotate(sign: number) {
-    const rotationSpeed = 0.01;
+    const rotationSpeed = 0.005;
 
     return new Vector(
       Math.cos(sign * rotationSpeed) * this.x -
@@ -113,17 +113,21 @@ const Scene = (props: {
     }
 
     if (keys.includes("d")) {
-      const nextPointVector = directionVector.rotate(-1);
-      const nextPlaneVector = new Vector(plane.x, plane.y).rotate(-1);
-      setDirection({ x: nextPointVector.x, y: nextPointVector.y });
-      setPlane({ x: nextPlaneVector.x, y: nextPlaneVector.y });
+      const nextPointVector = positionVector.add(
+        planeVector.multiply(stepSize)
+      );
+      if (canStep(nextPointVector)) {
+        setPosition({ x: nextPointVector.x, y: nextPointVector.y });
+      }
     }
 
     if (keys.includes("a")) {
-      const nextPointVector = directionVector.rotate(1);
-      const nextPlaneVector = new Vector(plane.x, plane.y).rotate(1);
-      setDirection({ x: nextPointVector.x, y: nextPointVector.y });
-      setPlane({ x: nextPlaneVector.x, y: nextPlaneVector.y });
+      const nextPointVector = positionVector.subtract(
+        planeVector.multiply(stepSize)
+      );
+      if (canStep(nextPointVector)) {
+        setPosition({ x: nextPointVector.x, y: nextPointVector.y });
+      }
     }
   });
 
