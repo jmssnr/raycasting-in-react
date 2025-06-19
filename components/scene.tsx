@@ -24,7 +24,7 @@ class Vector {
   }
 
   rotate(sign: number) {
-    const rotationSpeed = 0.005;
+    const rotationSpeed = (0.5 * Math.PI) / 180;
 
     return new Vector(
       Math.cos(sign * rotationSpeed) * this.x -
@@ -89,7 +89,7 @@ const Scene = (props: {
   const directionVector = new Vector(direction.x, direction.y);
   const planeVector = new Vector(plane.x, plane.y);
 
-  const stepSize = 0.5;
+  const stepSize = 0.25;
 
   useHotkeys("w, a, s, d", (event, handler) => {
     const nextPointVector = positionVector.add(
@@ -142,10 +142,11 @@ const Scene = (props: {
     }),
     [position, direction, plane, width, height, sceneTiles]
   );
-  console.log("Something");
+
   return (
     <SceneContext.Provider value={value}>
       <div
+        className="relative cursor-none"
         onMouseMove={(event) => {
           const rot = -event.movementX;
           const nextPointVector = directionVector.rotate(rot);
@@ -155,6 +156,7 @@ const Scene = (props: {
         }}
       >
         {children}
+        <div className="absolute left-[50%] top-[50%] rounded-full size-2 bg-white" />
       </div>
     </SceneContext.Provider>
   );
